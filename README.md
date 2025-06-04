@@ -1,111 +1,114 @@
+# Sistema de Controle IoT
 
-# Simulador de Automação Residencial IoT via MQTT
-
-Este projeto simula um sistema de automação residencial utilizando MQTT com Python. Ele permite controlar remotamente dispositivos como lâmpadas de cômodos e a porta da garagem, recebendo comandos via tópicos MQTT.
-
----
+Este projeto implementa um sistema de controle IoT para gerenciar dispositivos (luzes e portas) em múltiplos prédios através de uma interface web em tempo real.
 
 ## Funcionalidades
 
-* Controle de luz da Sala, Cozinha, Quarto, Banheiro, Corredor, Copa e Garagem.
-* Controle da Porta da Garagem (Abrir/Fechar).
-* Simulação local via terminal MQTT (`mosquitto_pub`).
-* Monitoramento do estado atual de cada dispositivo.
-* Integração com qualquer broker MQTT (público ou local).
+- Controle de luzes e portas em 5 prédios diferentes
+- Interface web responsiva e atualização em tempo real
+- Integração com MQTT para comunicação com dispositivos IoT
+- Atualizações automáticas via WebSocket
+- Suporte a múltiplos cômodos por prédio:
+  - Sala
+  - Cozinha
+  - Quarto
+  - Garagem
+  - Porta Principal
 
----
+## Requisitos
 
-## Tecnologias e Ferramentas
-
-* **Python 3.10+**
-* **MQTT** via [paho-mqtt](https://pypi.org/project/paho-mqtt/)
-
----
+- Python 3.8+
+- Flask
+- Flask-SocketIO
+- Paho-MQTT
+- Python-SocketIO
 
 ## Instalação
 
-### Instale as dependências:
-
+1. Clone o repositório:
 ```bash
-pip install paho-mqtt
+git clone [URL_DO_REPOSITORIO]
+cd IOTTrabalho2
 ```
 
-### Instale o cliente MQTT Mosquitto:
-
-* Acesse: [https://mosquitto.org/download/](https://mosquitto.org/download/)
-* Adicione o executável (`mosquitto_pub.exe`) ao **PATH** ou rode diretamente da pasta.
-
----
-
-### Executar o simulador:
-
+2. Instale as dependências:
 ```bash
-python testeIOT.py
+pip install -r requirements.txt
 ```
 
----
+## Executando o Projeto
 
-## Enviar comandos MQTT (exemplos)
-- abrir o terminal diretamente dentro da pasta do mosquitto 
-- deixar o código python executando no visual code
-
-### Acender a luz da Sala:
-
+1. Inicie o servidor:
 ```bash
-mosquitto_pub -h broker.emqx.io -t Casa/Sala -m "Ligar"
+python app.py
 ```
 
-### Apagar a luz da Cozinha:
+2. Acesse a interface web:
+- Abra http://localhost:5000 no seu navegador
 
-```bash
-mosquitto_pub -h broker.emqx.io -t Casa/Cozinha -m "Desligar"
-```
-
-### Abrir Porta da Garagem:
-
-```bash
-mosquitto_pub -h broker.emqx.io -t Casa/PortaGaragem -m "Abrir"
-```
-
-### Fechar Porta da Garagem:
-
-```bash
-mosquitto_pub -h broker.emqx.io -t Casa/PortaGaragem -m "Fechar"
-```
-
----
-
-## Estado dos Dispositivos
-
-Após cada comando, o terminal exibirá o estado atualizado de todos os cômodos e dispositivos, como:
+## Estrutura do Projeto
 
 ```
-Mensagem recebida | Tópico: Casa/Sala | Conteúdo: Ligar
-Sala: Ligado
+IOTTrabalho2/
+├── app.py              # Aplicação principal Flask
+├── main.py            # Ponto de entrada alternativo
+├── requirements.txt   # Dependências do projeto
+├── config/           # Configurações
+│   ├── dispositivos.py
+│   └── topicos.py
+├── controladores/    # Lógica de controle
+│   ├── controle_led.py
+│   └── controle_porta.py
+├── templates/        # Templates HTML
+│   └── index.html
+└── utils/           # Utilitários
+```
 
-Estado Atual da Casa:
- - Sala: True
- - Cozinha: False
- - Quarto: False
- - Banheiro: False
- - Corredor: False
- - Copa: False
- - Garagem: False
- - PortaGaragem: Fechada
-----------------------------------------
+## Uso
+
+### Interface Web
+
+A interface web permite:
+- Visualizar o estado atual de todos os dispositivos
+- Ligar/desligar luzes
+- Abrir/fechar portas
+- Ver atualizações em tempo real
+
+### MQTT
+
+O sistema usa o broker MQTT público (broker.emqx.io) para comunicação.
+
+Tópicos MQTT:
+- Formato: `{predio}/{comodo}`
+- Exemplo: `predio1/Sala`
+
+Mensagens:
+- Luzes: "ligar" ou "desligar"
+- Portas: "abrir" ou "fechar"
+
+### WebSocket
+
+O sistema implementa WebSocket para atualizações em tempo real:
+- Atualizações automáticas quando o estado muda
+- Sem necessidade de recarregar a página
+- Comunicação bidirecional entre servidor e cliente
+
+## Exemplos de Mensagens MQTT
+
+```
+# Ligar luz da sala do prédio 1
+predio1/Sala -> "ligar"
+
+# Desligar luz da cozinha do prédio 2
+predio2/Cozinha -> "desligar"
+
+# Abrir porta do prédio 3
+predio3/PortaPrincipal -> "abrir"
+
+# Fechar porta do prédio 4
+predio4/PortaPrincipal -> "fechar"
 ```
 
 
-
-### broker HIVE
-### dividir em arquivos por salas
-### predios podem ser arquivos
-### arquivo de configuração, estados/caracteristicas de cada dispositivo
-### Cada buscar de tópicos seria em um arquivo separado
-### arquivo de configuração
-### topico - comodo de cada predio 
-### predio/sala/dispositivo
-### arquivo de dispositivo
-### fazer vários predios, e neles ver os quartos
 
 
