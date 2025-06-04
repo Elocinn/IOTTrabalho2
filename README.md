@@ -1,113 +1,135 @@
 # Sistema de Controle IoT
 
-Este projeto implementa um sistema de controle IoT para gerenciar dispositivos (luzes e portas) em múltiplos prédios através de uma interface web em tempo real.
+Este projeto implementa um sistema de controle IoT para gerenciar dispositivos (LEDs e portas) em múltiplos prédios através de uma interface web e comunicação MQTT.
 
 ## Funcionalidades
 
-- Controle de luzes e portas em 5 prédios diferentes
-- Interface web responsiva e atualização em tempo real
-- Integração com MQTT para comunicação com dispositivos IoT
-- Atualizações automáticas via WebSocket
-- Suporte a múltiplos cômodos por prédio:
-  - Sala
-  - Cozinha
-  - Quarto
-  - Garagem
-  - Porta Principal
+- Controle de LEDs e portas em 5 prédios diferentes
+- Interface web responsiva com atualizações em tempo real
+- Comunicação bidirecional via MQTT
+- Feedback visual do estado dos dispositivos
+- Suporte a múltiplos cômodos por prédio (Sala, Cozinha, Quarto, Garagem)
+- Controle da porta principal de cada prédio
 
 ## Requisitos
 
-- Python 3.8+
-- Flask
-- Flask-SocketIO
-- Paho-MQTT
-- Python-SocketIO
+- Python 3.8 ou superior
+- pip (gerenciador de pacotes Python)
+- Conexão com a internet (para acesso ao broker MQTT)
+
+## Dependências
+
+O projeto utiliza as seguintes bibliotecas Python:
+- Flask 3.0.0
+- paho-mqtt 1.6.1
+- flask-socketio
+- python-socketio
 
 ## Instalação
 
 1. Clone o repositório:
 ```bash
-git clone [URL_DO_REPOSITORIO]
+git clone [URL_DO_REPOSITÓRIO]
 cd IOTTrabalho2
 ```
 
-2. Instale as dependências:
+2. Crie um ambiente virtual (recomendado):
+```bash
+python -m venv venv
+```
+
+3. Ative o ambiente virtual:
+- Windows:
+```bash
+venv\Scripts\activate
+```
+- Linux/Mac:
+```bash
+source venv/bin/activate
+```
+
+4. Instale as dependências:
 ```bash
 pip install -r requirements.txt
 ```
 
-## Executando o Projeto
+## Execução
 
-1. Inicie o servidor:
+O projeto requer dois componentes em execução simultânea:
+
+1. Servidor Web (Interface):
 ```bash
 python app.py
 ```
+A interface web estará disponível em: http://localhost:5000
 
-2. Acesse a interface web:
-- Abra http://localhost:5000 no seu navegador
+2. Cliente MQTT (em outro terminal):
+```bash
+python main.py
+```
 
 ## Estrutura do Projeto
 
 ```
 IOTTrabalho2/
-├── app.py              # Aplicação principal Flask
-├── main.py            # Ponto de entrada alternativo
-├── requirements.txt   # Dependências do projeto
-├── config/           # Configurações
-│   ├── dispositivos.py
-│   └── topicos.py
-├── controladores/    # Lógica de controle
+├── app.py              # Servidor web e WebSocket
+├── main.py             # Cliente MQTT
+├── requirements.txt    # Dependências do projeto
+├── config/            # Configurações
+│   ├── dispositivos.py # Estado dos dispositivos
+│   └── topicos.py     # Tópicos MQTT
+├── controladores/     # Lógica de controle
 │   ├── controle_led.py
 │   └── controle_porta.py
-├── templates/        # Templates HTML
+├── templates/         # Interface web
 │   └── index.html
-└── utils/           # Utilitários
+└── utils/            # Utilitários
+    └── estado.py
 ```
 
 ## Uso
 
 ### Interface Web
+1. Acesse http://localhost:5000
+2. Selecione o prédio desejado
+3. Use os botões para controlar os dispositivos:
+   - LEDs: Ligar/Desligar
+   - Porta Principal: Abrir/Fechar
 
-A interface web permite:
-- Visualizar o estado atual de todos os dispositivos
-- Ligar/desligar luzes
-- Abrir/fechar portas
-- Ver atualizações em tempo real
-
-### MQTT
-
-O sistema usa o broker MQTT público (broker.emqx.io) para comunicação.
+### Comunicação MQTT
+O sistema utiliza o broker público broker.emqx.io na porta 1883.
 
 Tópicos MQTT:
-- Formato: `{predio}/{comodo}`
-- Exemplo: `predio1/Sala`
+- Formato: `predioX/Comodo`
+- Exemplo: `predio1/Sala`, `predio2/PortaPrincipal`
 
 Mensagens:
-- Luzes: "ligar" ou "desligar"
-- Portas: "abrir" ou "fechar"
+- LEDs: "ligar" ou "desligar"
+- Porta: "abrir" ou "fechar"
 
-### WebSocket
+## Testando o Sistema
 
-O sistema implementa WebSocket para atualizações em tempo real:
-- Atualizações automáticas quando o estado muda
-- Sem necessidade de recarregar a página
-- Comunicação bidirecional entre servidor e cliente
+1. Inicie o servidor web e o cliente MQTT conforme instruções acima
+2. Acesse a interface web
+3. Teste o controle dos dispositivos pela interface
+4. Use um cliente MQTT (como MQTT Explorer) para enviar mensagens diretamente
+5. Verifique as atualizações em tempo real na interface web
 
-## Exemplos de Mensagens MQTT
+## Solução de Problemas
 
-```
-# Ligar luz da sala do prédio 1
-predio1/Sala -> "ligar"
+1. Se a interface web não carregar:
+   - Verifique se o servidor web está rodando
+   - Confirme se a porta 5000 está disponível
 
-# Desligar luz da cozinha do prédio 2
-predio2/Cozinha -> "desligar"
+2. Se não houver atualizações em tempo real:
+   - Verifique se o cliente MQTT está rodando
+   - Confirme a conexão com o broker MQTT
 
-# Abrir porta do prédio 3
-predio3/PortaPrincipal -> "abrir"
+3. Se os dispositivos não responderem:
+   - Verifique os logs do terminal
+   - Confirme se as mensagens MQTT estão sendo enviadas corretamente
 
-# Fechar porta do prédio 4
-predio4/PortaPrincipal -> "fechar"
-```
+
 
 
 
