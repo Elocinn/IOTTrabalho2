@@ -1,1 +1,22 @@
-topicos = ['predio1/Sala', 'predio1/Cozinha', 'predio1/Quarto', 'predio1/Garagem', 'predio1/PortaPrincipal', 'predio2/Sala', 'predio2/Cozinha', 'predio2/Quarto', 'predio2/Garagem', 'predio2/PortaPrincipal', 'predio3/Sala', 'predio3/Cozinha', 'predio3/Quarto', 'predio3/Garagem', 'predio3/PortaPrincipal', 'predio4/Sala', 'predio4/Cozinha', 'predio4/Quarto', 'predio4/Garagem', 'predio4/PortaPrincipal', 'predio5/Sala', 'predio5/Cozinha', 'predio5/Quarto', 'predio5/Garagem', 'predio5/PortaPrincipal']
+topicos = [
+    
+    'Sala/Luz',
+    'Sala/Televisao',
+    'Sala/Radio',
+    'Sala/Aspirador',
+    'Sala/Janela',
+
+    'Quarto/Luz',
+    'Quarto/Televisao',
+    'Quarto/Ar Condicionado',
+    'Quarto/Cortinas',
+    'Quarto/Janela',
+
+    'Cozinha/Luz',
+    'Cozinha/Exaustor',
+    'Cozinha/Janela',
+
+    'Garagem/Luz',
+    'Garagem/PortaPrincipal',
+    'Garagem/PortaoAutomatico'
+]

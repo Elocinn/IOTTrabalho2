@@ -9,42 +9,35 @@ import json
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# Configuração do cliente MQTT
 client = mqtt.Client()
 broker = "broker.emqx.io"
 port = 1883
 
 def on_connect(client, userdata, flags, rc):
     print(f"Conectado ao broker MQTT com código: {rc}")
-    # Inscreve-se nos tópicos de todos os prédios
-    for predio in estado_dispositivos.keys():
-        client.subscribe(f"{predio}/#")
+    for comodo in estado_dispositivos.keys():
+        client.subscribe(f"{comodo}/#")
 
 def on_message(client, userdata, msg):
     try:
-        # Extrai o prédio e o cômodo do tópico
         topic_parts = msg.topic.split('/')
-        predio = topic_parts[0]
-        comodo = topic_parts[1]
+        comodo = topic_parts[0]
+        dispositivo = topic_parts[1]
         mensagem = msg.payload.decode()
         
-        # Atualiza o estado local
-        if comodo == "PortaPrincipal":
-            controla_porta(estado_dispositivos, predio, mensagem)
+        if dispositivo == "PortaPrincipal":
+            controla_porta(estado_dispositivos, comodo, mensagem)
         else:
-            controla_led(estado_dispositivos, predio, comodo, mensagem)
+            controla_led(estado_dispositivos, comodo, dispositivo, mensagem)
             
-        # Emite evento WebSocket com o novo estado
         socketio.emit('estado_atualizado', estado_dispositivos)
             
     except Exception as e:
         print(f"Erro ao processar mensagem MQTT: {e}")
 
-# Configura callbacks
 client.on_connect = on_connect
 client.on_message = on_message
 
-# Conecta ao broker
 client.connect(broker, port)
 client.loop_start()
 
@@ -55,18 +48,15 @@ def index():
 @app.route('/atualizar_led', methods=['POST'])
 def atualizar_led():
     data = request.json
-    predio = data['predio']
     comodo = data['comodo']
+    dispositivo = data['dispositivo']
     acao = data['acao']
     
-    # Publica no tópico MQTT
-    topic = f"{predio}/{comodo}"
+    topic = f"{comodo}/{dispositivo}"
     client.publish(topic, acao)
     
-    # Atualiza estado local
-    controla_led(estado_dispositivos, predio, comodo, acao)
+    controla_led(estado_dispositivos, comodo, dispositivo, acao)
     
-    # Emite evento WebSocket com o novo estado
     socketio.emit('estado_atualizado', estado_dispositivos)
     
     return jsonify(estado_dispositivos)
@@ -74,17 +64,15 @@ def atualizar_led():
 @app.route('/atualizar_porta', methods=['POST'])
 def atualizar_porta():
     data = request.json
-    predio = data['predio']
+    comodo = data['comodo']
+    dispositivo = data['dispositivo']
     acao = data['acao']
     
-    # Publica no tópico MQTT
-    topic = f"{predio}/PortaPrincipal"
+    topic = f"{comodo}/{dispositivo}"
     client.publish(topic, acao)
     
-    # Atualiza estado local
-    controla_porta(estado_dispositivos, predio, acao)
+    controla_porta(estado_dispositivos, comodo, dispositivo, acao)
     
-    # Emite evento WebSocket com o novo estado
     socketio.emit('estado_atualizado', estado_dispositivos)
     
     return jsonify(estado_dispositivos)

@@ -23,12 +23,16 @@ def on_message(client, userdata, msg):
     print(f"\nMensagem recebida | {topico}: {mensagem}")
 
     partes = topico.split("/")
-    predio, comodo = partes[0], partes[1]
+    if len(partes) != 2:
+        print(f"Tópico inválido: {topico}")
+        return
 
-    if comodo == "PortaPrincipal":
-        controla_porta(estado_dispositivos, predio, mensagem)
+    comodo, dispositivo = partes
+
+    if "Porta" in dispositivo or "Janela" in dispositivo or "Cortinas" in dispositivo:
+        controla_porta(estado_dispositivos, comodo, dispositivo, mensagem)
     else:
-        controla_led(estado_dispositivos, predio, comodo, mensagem)
+        controla_led(estado_dispositivos, comodo, dispositivo, mensagem)
 
     mostrar_estado(estado_dispositivos)
 
@@ -36,6 +40,6 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-print("Conectando...")
+print("Conectando ao broker MQTT...")
 client.connect(broker, port)
 client.loop_forever()

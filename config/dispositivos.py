@@ -1,1 +1,26 @@
-estado_dispositivos = {'predio1': {'Sala': False, 'Cozinha': False, 'Quarto': False, 'Garagem': False, 'PortaPrincipal': 'Fechada'}, 'predio2': {'Sala': False, 'Cozinha': False, 'Quarto': False, 'Garagem': False, 'PortaPrincipal': 'Fechada'}, 'predio3': {'Sala': False, 'Cozinha': False, 'Quarto': False, 'Garagem': False, 'PortaPrincipal': 'Fechada'}, 'predio4': {'Sala': False, 'Cozinha': False, 'Quarto': False, 'Garagem': False, 'PortaPrincipal': 'Fechada'}, 'predio5': {'Sala': False, 'Cozinha': False, 'Quarto': False, 'Garagem': False, 'PortaPrincipal': 'Fechada'}}
+estado_dispositivos = {
+    'Sala': {
+        'Luz': False,
+        'Televisao': False,
+        'Radio': False,
+        'Aspirador': False,
+        'Janela': 'Fechada'
+    },
+    'Quarto': {
+        'Luz': False,
+        'Televisao': False,
+        'Ar Condicionado': False,
+        'Cortinas': 'Fechada',
+        'Janela': 'Fechada'
+    },
+    'Cozinha': {
+        'Luz': False,
+        'Exaustor': False,
+        'Janela': 'Fechada'
+    },
+    'Garagem': {
+        'Luz': False,
+        'PortaPrincipal': 'Fechada',
+        'PortaoAutomatico': 'Fechada'
+    }
+}

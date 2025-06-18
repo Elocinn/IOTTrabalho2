@@ -1,9 +1,9 @@
-def controla_led(estado_dispositivos, predio, comodo, mensagem):
+def controla_led(estado_dispositivos, comodo, dispositivo, mensagem):
     if mensagem.lower() == "ligar":
-        estado_dispositivos[predio][comodo] = True
-        print(f"{predio}/{comodo}: Ligado")
+        estado_dispositivos[comodo][dispositivo] = True
+        print(f"{comodo}/{dispositivo}: Ligado")
     elif mensagem.lower() == "desligar":
-        estado_dispositivos[predio][comodo] = False
-        print(f"{predio}/{comodo}: Desligado")
+        estado_dispositivos[comodo][dispositivo] = False
+        print(f"{comodo}/{dispositivo}: Desligado")
     else:
-        print(f"Comando inválido para {predio}/{comodo}: {mensagem}")
+        print(f"Comando inválido para {comodo}/{dispositivo}: {mensagem}")
