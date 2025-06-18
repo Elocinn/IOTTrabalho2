@@ -22,5 +22,9 @@ estado_dispositivos = {
         'Luz': False,
         'PortaPrincipal': 'Fechada',
         'PortaoAutomatico': 'Fechada'
+    },
+    'Sistema de Alarme': {
+        'Alarme': False
     }
+    
 }

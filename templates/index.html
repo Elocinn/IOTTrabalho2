@@ -114,6 +114,18 @@
             }
         }
 
+        async function ativarAlarme() {
+             try {
+                const response = await fetch('/ativar_alarme', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                 const data = await response.json();
+                atualizarInterface(data);
+            } catch (error) {
+                console.error('Erro ao ativar o alarme:', error);
+            }
+        }
         function atualizarInterface(dispositivos) {
             for (const comodo in dispositivos) {
                 for (const dispositivo in dispositivos[comodo]) {

@@ -18,5 +18,7 @@ topicos = [
 
     'Garagem/Luz',
     'Garagem/PortaPrincipal',
-    'Garagem/PortaoAutomatico'
+    'Garagem/PortaoAutomatico',
+
+    'Sistema de Alarme/Alarme'
 ]

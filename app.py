@@ -3,6 +3,7 @@ from flask_socketio import SocketIO
 from config.dispositivos import estado_dispositivos
 from controladores.controle_led import controla_led
 from controladores.controle_porta import controla_porta
+from controladores.ativar_alarme import ativar_alarme
 import paho.mqtt.client as mqtt
 import json
 
@@ -27,6 +28,9 @@ def on_message(client, userdata, msg):
         
         if dispositivo == "PortaPrincipal":
             controla_porta(estado_dispositivos, comodo, mensagem)
+        if comodo == "Sistema de Alarme" and dispositivo == "Alarme":
+            if mensagem.lower() == "ligar":
+                ativar_alarme(estado_dispositivos)
         else:
             controla_led(estado_dispositivos, comodo, dispositivo, mensagem)
             
@@ -77,5 +81,11 @@ def atualizar_porta():
     
     return jsonify(estado_dispositivos)
 
+@app.route('/ativar_alarme', methods=['POST'])
+def ativar_alarme_endpoint():
+    ativar_alarme(estado_dispositivos)
+    socketio.emit('estado_atualizado', estado_dispositivos)
+    return jsonify(estado_dispositivos)
+    
 if __name__ == '__main__':
     socketio.run(app, debug=True) 
