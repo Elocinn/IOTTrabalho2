@@ -28,3 +28,10 @@ estado_dispositivos = {
     }
     
 }
+
+temperaturas_ambientes = {
+    'Sala': 25.0,
+    'Quarto': 25.0,
+    'Cozinha': 25.0,
+    'Garagem': 25.0
+}
